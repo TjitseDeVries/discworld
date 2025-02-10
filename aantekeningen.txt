@@ -1,0 +1,32 @@
+/etc/systemd/system/v4l2rtspserver.service
+
+sudo nano /boot/firmware/config.txt
+
+sudo useradd -r -s /usr/sbin/nologin v4l2rtsp
+sudo usermod -aG video v4l2rtsp
+
+sudo apt install ufw
+sudo ufw default deny incoming
+sudo ufw limit ssh
+sudo ufw default allow outgoing
+sudo ufw logging low
+
+# Allow Samba from your local subnet (IPv4 only)
+sudo ufw allow from 192.168.178.0/24 to any port 137 proto udp comment 'Samba 137' 
+sudo ufw allow from 192.168.178.0/24 to any port 138 proto udp comment 'Samba 138' 
+sudo ufw allow from 192.168.178.0/24 to any port 139 proto tcp comment 'Samba 139' 
+sudo ufw allow from 192.168.178.0/24 to any port 445 proto tcp comment 'Samba 445'
+sudo ufw allow from 192.168.178.0/24 to any port 22 proto tcp comment 'SSH Port' 
+sudo ufw deny from ::/0 comment 'Block IPv6'
+sudo ufw enable
+
+Section here to copy the service file to the applicable directory.
+Copy to directory and on success run enable command. 
+
+sudo systemctl enable v4l2rtspserver.service
+sudo systemctl start v4l2rtspserver.service
+
+
+sudo apt install git cmake -y
+git clone https://github.com/mpromonet/v4l2rtspserver
+cd v4l2rtspserver && cmake . && make && sudo make install

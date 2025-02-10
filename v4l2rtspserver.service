@@ -1,0 +1,20 @@
+# systemd configuration for v4l2rtspserver
+# /etc/systemd/system/v4l2rtspserver.service
+
+[Unit]
+Description=v4l2rtspserver rtsp streaming server
+After=network.target
+
+[Service]
+#ExecStartPre=/usr/bin/v4l2-ctl --set-ctrl vertical_flip=1
+ExecStartPre=/usr/bin/v4l2-ctl --set-ctrl video_bitrate_mode=0
+ExecStartPre=/usr/bin/sleep 2
+ExecStart=/usr/local/bin/v4l2rtspserver /dev/video0 -f
+#ExecReload=/bin/kill -HUP $MAINPID
+Type=simple
+User=v4l2rtsp
+Group=video
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
